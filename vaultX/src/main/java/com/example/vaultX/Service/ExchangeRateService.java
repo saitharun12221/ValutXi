@@ -100,6 +100,50 @@ public class ExchangeRateService {
         results.put("orignial",Map.of (
             "Currency",wallet.getCurrency(),"Symbol",wallet.getCurrency().getsymbol(),"Balance",wallet.getbalance())
         );
-        //conversions ExchangeRateApiResponse CachedRate
+        List<Map<String,Object>> conversion = new ArrayList<>();
+        for (CurrencyType target : targetCurrencies){
+            if (target! = wallet.getCurrency()){
+                BigDecimal convertedamount = convertCurrency(wallet.getbalance(),wallet.getCurrency(),target);
+                BigDecimal rate = getExchangeRate(wallet.getCurrency(), conversion.add(Map.of (
+                    "currency",target,"symbol",target.getsymbol(),"balance",convertedamount
+                )))
+                results.put("conversions",conversion);
+                return results;
+            }
+        }
+        // ExchangeRateApiResponse CachedRate
+    }
+    public BigDecimal getfallbackrate(CurrencyType from, CurrencyType to){
+        Map<String,BigDecimal> fallbackrates = new HashMap<>();
+        fallbackrates.put("USD_EUR",new BigDecimal("0.85"));
+        fallbackrates.put("USD_INR",new BigDecimal("90.50"));
+        fallbackrates.put("EUR_USD",new BigDecimal("1.18"));
+        fallbackrates.put("EUR_INR",new BigDecimal("105.08"));
+        fallbackrates.put("INR_USD",new BigDecimal("0.011"));
+        fallbackrates.put("INR_EUR",new BigDecimal("0.0095"));
+        fallbackrates.put("USD_BTC",new BigDecimal("0.000022"));
+        fallbackrates.put("USD_LTC",new BigDecimal("0.013"));
+        fallbackrates.put("BTC_USD",new BigDecimal("45000.00"));
+        fallbackrates.put("LTC_USD",new BigDecimal("150.00"));
+        fallbackrates.put("BTC_LTC",new BigDecimal("1122.70"));
+        fallbackrates.put("LTC_BTC",new BigDecimal("0.00089"));
+        String key = from.name()+"_" + to.name();
+        if (fallbackrates.containsKey(key)){
+            log.warn("Using fallbackrate for {} to {}",from,to,fallbackrates.get(key));
+            return fallbackrates.get(key);
+        }
+        String reversekey = to.name()+"_"+from.name();
+        if (fallbackrates.containsKey(reversekey)){
+            BigDecimal reverserate =fallbackrates.get(reversekey);
+            BigDecimal rate = BigDecimal.ONE.divide(reverserate,8,RoundingMode.HALF_UP);
+            log.warn ("Using inverse fallbackrate for {} to {}",to ,from,rate);
+            return rate;
+        }
+        log.error("No fallBack rate found for {} to {},using 1.0",from,to);
+        return BigDecimal.ONE;
+    }
+    public ExchangeRateApiResponse setfallbackresponse(CurrencyType base){
+        ExchangeRateApiResponse response = new ExchangeRateApiResponse();
+        response.setbase("base Currency",base currency.name());
     }
 }
