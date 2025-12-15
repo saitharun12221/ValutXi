@@ -1,5 +1,7 @@
 package com.example.vaultX.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,15 +11,19 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "userDetails")
+@Table(name = "user_details")
 public class UserDetails {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userDetailsId;
     private String firstName;
     private String lastName;
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String phone;
+    private String address;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     @OneToOne
-    @JoinColumn(name = "userId")
-    private Long userId;//const crypto = require('crypto');
-
+    @JoinColumn(name = "user_id",unique=true)
+     private Users user;
 // function generateHashId(email, timestamp) {
 //   const hash = crypto
 //     .createHash('sha256')
@@ -26,16 +32,13 @@ public class UserDetails {
 //     .substring(0, 16); // Take first 16 chars
 //   return hash;
 // }
-    private String phone;
-    private String address;
-    private Users user;
     public UserDetails(){
-
+        this.createdAt=LocalDateTime.now();
+        this.updatedAt=LocalDateTime.now();
     }
-    public UserDetails(String firstName,String lastName, Long userId, String phone, String address, Users user){
+    public UserDetails(String firstName,String lastName,String phone, String address, Users user){
         this.firstName=firstName;
         this.lastName=lastName;
-        this.userId=userId;
         this.phone = phone;
         this.address= address;
         this.user = user;
@@ -48,11 +51,6 @@ public class UserDetails {
         return lastName;
     }
     public void setlastName(String lastName){this.lastName=lastName;}
-    public Long getuserId(){
-        return userId;
-    }
-    public void setuserId(Long userId){this.userId=userId;
-    }
      public String getphone(){
         return phone;
     }
@@ -66,6 +64,18 @@ public class UserDetails {
     }
     public void setusers(Users user){
         this.user=user;
+    }
+    public LocalDateTime getcreatedAt(){
+        return createdAt;
+    }
+    public void setcreatedAt(LocalDateTime createdAt){
+        this.createdAt=createdAt;
+    }
+    public LocalDateTime getupdatedAt(){
+        return updatedAt;
+    }
+    public void setupdatedAt(LocalDateTime updatedAt){
+        this.updatedAt=updatedAt;
     }
 
 

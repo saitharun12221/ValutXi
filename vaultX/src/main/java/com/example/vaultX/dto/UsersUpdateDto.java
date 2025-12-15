@@ -1,6 +1,5 @@
 package com.example.vaultX.dto;
 
-import java.time.LocalDate;
 
 public class UsersUpdateDto {
     private String username;
@@ -9,7 +8,6 @@ public class UsersUpdateDto {
     private String firstName;
     private String lastName;
     private String phone;
-    private LocalDate dateofbirth;
     public String getusername(){
         return username;
     }
@@ -45,11 +43,5 @@ public class UsersUpdateDto {
     }
     public void setphone(String phone){
         this.phone=phone;
-    }
-    public LocalDate getdateofbirth(){
-        return dateofbirth;
-    }
-    public void setdateofbirth(LocalDate dateofbirth){
-        this.dateofbirth=dateofbirth;
     }
 }

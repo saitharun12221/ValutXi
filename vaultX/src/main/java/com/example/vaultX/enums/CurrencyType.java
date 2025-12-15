@@ -3,7 +3,7 @@ package com.example.vaultX.enums;
 public enum CurrencyType {  //usd,euro,btc,ltc - usd-usd btc-btc euro-euro ltc-ltc (false)
     INR("Indian Ruppee","R",false),
     USD("US Dollar","$",false),
-    EURO("EURO","E",false),
+    EUR("EURO","E",false),
     BTC("Bitcoin","B",true),
     LTC("Litecoin","L",true);
     private final String displayName;

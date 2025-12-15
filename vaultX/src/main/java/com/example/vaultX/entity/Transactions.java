@@ -1,30 +1,49 @@
 package com.example.vaultX.entity;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.example.vaultX.enums.CurrencyType;
 import com.example.vaultX.enums.TransactionalStatus;
 import com.example.vaultX.enums.TransactionalType;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Transactions")
 public class Transactions {
-    private Long userId;
-    private String fromWallet;
-    private String toWallet;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="transaction_id")
+    private Long transactionId;
+    @ManyToOne
+    @JoinColumn(name="from_wallet_id")
+    private Wallet fromWallet;
+    @ManyToOne
+    @JoinColumn(name="to_wallet_id")
+    private Wallet toWallet;
     private BigDecimal amount;
     private CurrencyType currency;
     private TransactionalType type;
     private String description;
     private TransactionalStatus status;
-    private LocalDate createdAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime completedAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id",nullable=false)
     private Users user;
     public Transactions(){
-
+        this.completedAt=LocalDateTime.now();
+        this.status = TransactionalStatus.PENDING;
     }
 
       public Transactions(BigDecimal amount, TransactionalType type, Users user) {
@@ -33,22 +52,22 @@ public class Transactions {
         this.type = type;
         this.user = user;
     }
-    public Long getuserId(){
-        return userId;
+    public Long getId(){
+        return transactionId;
     }
-    public void setuserId(Long userId){
-        this.userId=userId;
+    public void setuserId(Long transactionId){
+        this.transactionId=transactionId;
     }
-    public String getfromWallet(){
+    public Wallet getfromWallet(){
         return fromWallet;
     }
-    public void setfromWallet(String fromWallet){
+    public void setfromWallet(Wallet fromWallet){
         this.fromWallet=fromWallet;
     }
-    public String gettoWallet(){
+    public Wallet gettoWallet(){
         return toWallet;
     }
-    public void settoWallet(String toWallet){
+    public void setToWallet(Wallet toWallet){
         this.toWallet=toWallet;
     }
     public BigDecimal getamount(){
@@ -72,7 +91,7 @@ public class Transactions {
     public String getdescription(){
         return description;
     }
-    public void setdescription(String description){
+    public void setDescription(String description){
         this.description=description;
     }
     public TransactionalStatus getstatus(){
@@ -81,11 +100,17 @@ public class Transactions {
     public void setstatus(TransactionalStatus status){
         this.status=status;
     }
-    public LocalDate getcreatedAt(){
+    public LocalDateTime getcreatedAt(){
         return createdAt;
     }
-    public void setcreatedAt(LocalDate createdAt){
+    public void setcreatedAt(LocalDateTime createdAt){
         this.createdAt=createdAt;
+    }
+    public LocalDateTime getCompletedAt(){
+        return completedAt;
+    }
+    public void setCompletedAt(LocalDateTime completedAt){
+        this.completedAt=completedAt;
     }
 
 }

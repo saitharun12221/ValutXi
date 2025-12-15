@@ -9,7 +9,6 @@ public class UserDetailsDto {
     private String firstName;
     private String lastName;
     private String phone;
-    private LocalDate dateofbirth;
     public String getusername(){
         return username;
     }
@@ -45,11 +44,5 @@ public class UserDetailsDto {
     }
     public void setphone(String phone){
         this.phone=phone;
-    }
-    public LocalDate getdateofbirth(){
-        return dateofbirth;
-    }
-    public void setdateofbirth(LocalDate dateofbirth){
-        this.dateofbirth=dateofbirth;
     }
 }

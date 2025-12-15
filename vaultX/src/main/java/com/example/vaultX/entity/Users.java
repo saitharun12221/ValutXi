@@ -1,13 +1,17 @@
 package com.example.vaultX.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -25,26 +29,22 @@ public class Users {
     private LocalDateTime updatedAt;// only renders when password changed;
     // @OneToOne(cascade = CascadeType.ALL)
     // @JoinColumn(name = "user_details_fk")
+    @OneToOne(mappedBy="user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private UserDetails userDetails;
-    // @OneToOne(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "wallet_fk")
+    @OneToOne(mappedBy="user",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Wallet wallet;
-    private Transactions transaction;
+    @OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    private List<Transactions> transaction;
     private boolean status;
     public Users(){
-
+        this.createdAt=LocalDateTime.now();
+        this.updatedAt=LocalDateTime.now();
     }
-    public Users(Long userId, String userName, String email, String password, LocalDateTime createdAt, LocalDateTime updatedAt,UserDetails userDetails, Wallet wallet,Transactions transaction, boolean status){
-        this.userId=userId;
+    public Users(String userName, String email, String password){
+        this();
         this.userName=userName;
         this.email=email;
         this.password=password;
-        this.createdAt=createdAt;
-        this.updatedAt=updatedAt;
-        this.userDetails=userDetails;
-        this.wallet=wallet;
-        this.transaction=transaction;
-        this.status = status;
     }
     public Long getuserId(){
         return userId;
@@ -52,10 +52,10 @@ public class Users {
     public void setuserId(Long userId){
         this.userId=userId;
     }
-    public String getuserName(){
+    public String getusername(){
         return userName;
     }
-    public void setuserName(String userName){
+    public void setusername(String userName){
         this.userName=userName;
     }
     public String getemail(){
@@ -94,10 +94,10 @@ public class Users {
     public void setWallet(Wallet wallet){
         this.wallet=wallet;
     }
-    public Transactions gettTransactions(){
+    public List<Transactions> getTransactions(){
         return transaction;
     }
-    public void setTransactions(Transactions transaction){
+    public void setTransactions(List<Transactions> transaction){
         this.transaction = transaction;
     }
     public boolean getstatus(){

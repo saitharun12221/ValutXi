@@ -5,38 +5,45 @@ import java.time.LocalDateTime;
 
 import com.example.vaultX.enums.CurrencyType;
 
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Wallet")
 public class Wallet {
-    private int wallet_id;
-    private BigDecimal balance;
+    @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private Long wallet_id;
+    private BigDecimal balance=BigDecimal.ZERO;
     private CurrencyType currency;//enum
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean isActive;
-    // @OneToOne(mappedBy = "wallet")
-    // private Users user;
+    // private Long userId;
+    @OneToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="user_id",unique=true)
     private Users user;
     public Wallet(){
-
+        this.createdAt=LocalDateTime.now();
+        this.updatedAt=LocalDateTime.now();
     }
-    public Wallet(int wallet_id, BigDecimal balance, CurrencyType currency,LocalDateTime createdAt, LocalDateTime updatedAt, boolean isActive, Users user){
-        this.wallet_id=wallet_id;
+    public Wallet(BigDecimal balance, CurrencyType currency,Users user){
+        this();
         this.balance=balance;
         this.currency=currency;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.isActive = isActive;
         this.user = user;
     }
-    public int getwallet_id(){
+    public Long getwallet_id(){
         return wallet_id;
     }
-    public void setwallet_id(int wallet_id){
+    public void setwallet_id(Long wallet_id){
         this.wallet_id=wallet_id;
     }
     public BigDecimal getbalance(){
@@ -65,6 +72,9 @@ public class Wallet {
     }
     public boolean isActive(){
         return isActive;
+    }
+    public void setisActive(boolean active){
+        isActive=active;
     }
     public Users getuser(){
         return user;
