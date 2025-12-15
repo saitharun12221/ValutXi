@@ -3,6 +3,8 @@ package com.example.vaultX.entity;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,6 +36,7 @@ public class Users {
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL,fetch=FetchType.LAZY)
     private Wallet wallet;
     @OneToMany(mappedBy="user",cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+    @JsonIgnore
     private List<Transactions> transaction;
     private boolean status;
     public Users(){

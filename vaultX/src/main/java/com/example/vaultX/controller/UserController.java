@@ -4,6 +4,8 @@ import com.example.vaultX.Service.UserService;
 import com.example.vaultX.dto.*;
 import com.example.vaultX.entity.Users;
 import com.example.vaultX.exception.UserAlreadyExistsException;
+import com.example.vaultX.exception.UserNotFoundException;
+
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,27 +56,35 @@ public class UserController {
                     .body(errorResponse);
         }
     }
-}
 
-    // // GET USER BY ID
-    // @GetMapping("/{id}")
-    // public ResponseEntity<?> getUserById(@PathVariable Long id) {
-    //     log.info("GET /api/users/{} - Fetching user", id);
+    // GET USER BY ID
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        log.info("GET /api/users/{} - Fetching user", id);
         
-    //     try {
-    //         Users user = userService.getUserById(id);
-    //         return ResponseEntity.ok(convertToResponse(user));
-    //     } catch (UserNotFoundException e) {
-    //         log.warn("User not found with ID: {}", id);
-    //         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-    //                 .body(createErrorResponse("User not found", e.getMessage()));
-    //     } catch (Exception e) {
-    //         log.error("Error fetching user with ID: {}", id, e);
-    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-    //                 .body(createErrorResponse("Error fetching user", "Internal server error"));
-    //     }
+        try {
+            Users user = userService.getUserById(id);
+            UserDto userDTO = UserDto.fromEntity(user);
+            return ResponseEntity.ok(userDTO);
+        } catch (UserNotFoundException e) {
+            log.warn("User not found with ID: {}", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error fetching user with ID: {}", id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("internal error");
+        }
+    }
+    // private Map<String, Object> createErrorResponse(String error, String message) {
+    //     Map<String, Object> response = new HashMap<>();
+    //     response.put("timestamp", LocalDateTime.now());
+    //     response.put("error", error);
+    //     response.put("message", message);
+    //     response.put("status", "error");
+    //     return response;
     // }
-
+}
     // // GET ALL USERS
     // @GetMapping
     // public ResponseEntity<?> getAllUsers() {

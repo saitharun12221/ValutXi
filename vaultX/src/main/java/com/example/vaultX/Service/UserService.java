@@ -36,7 +36,7 @@ public class UserService {
     /**
      * Create a new user from UserDetailsDTO
      */
-    @Transactional
+    // @Transactional
     public Users createUser(UserDetailsDto userDetailsDTO) {
         log.info("Creating new user with email: {}", userDetailsDTO.getemail());
         
@@ -56,6 +56,7 @@ public class UserService {
             Users user = new Users();
             user.setemail(userDetailsDTO.getemail());
             user.setusername(userDetailsDTO.getusername());
+            user.setstatus(true);
             
             // Encode password before storing
             String encodedPassword = passwordEncoder.encode(userDetailsDTO.getpassword());
@@ -77,7 +78,8 @@ public class UserService {
             throw new ServiceException("User creation failed", e);
         }
     }
-}
+
+
 //     /**
 //      * Update user from UserUpdateDTO
 //      */
@@ -162,19 +164,20 @@ public class UserService {
 //     /**
 //      * Get user by ID
 //      */
-//     public Users getUserById(Long userId) {
-//         log.debug("Fetching user by ID: {}", userId);
+    public Users getUserById(Long userId) {
+        log.debug("Fetching user by ID: {}", userId);
         
-//         Optional<Users> user = userRepository.findById(userId);
+        Optional<Users> user = userRepository.findById(userId);
         
-//         if (user.isEmpty()) {
-//             log.warn("User not found with ID: {}", userId);
-//             throw new UserNotFoundException("User not found");
-//         }
+        if (user.isEmpty()) {
+            log.warn("User not found with ID: {}", userId);
+            throw new UserNotFoundException("User not found");
+        }
         
-//         log.trace("Found user: {}", user.get().getemail());
-//         return user.get();
-//     }
+        log.trace("Found user: {}", user.get().getemail());
+        return user.get();
+    }
+}
     
 //     /**
 //      * Authenticate user

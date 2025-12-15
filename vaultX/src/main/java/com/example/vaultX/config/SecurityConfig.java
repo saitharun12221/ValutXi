@@ -26,11 +26,9 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())  // Disable CSRF for APIs
             .authorizeHttpRequests(auth -> auth
                 // Permit all access to registration and login endpoints
-                .requestMatchers("/api/users/register", "/api/users/login").permitAll()
-                // Require authentication for other user endpoints
-                .requestMatchers("/api/users/**").authenticated()
+                .requestMatchers("/api/users/**").permitAll()
                 // Permit all other requests (adjust as needed)
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // For REST APIs
