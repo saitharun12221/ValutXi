@@ -2,17 +2,17 @@ package com.example.vaultX.dto;
 
 
 public class UsersUpdateDto {
-    private String username;
+    private String userName;
     private String email;
     private String password;
     private String firstName;
     private String lastName;
     private String phone;
     public String getusername(){
-        return username;
+        return userName;
     }
-    public void setusername(String username){
-        this.username=username;
+    public void setusername(String userName){
+        this.userName=userName;
     }
     public String getemail(){
         return email;

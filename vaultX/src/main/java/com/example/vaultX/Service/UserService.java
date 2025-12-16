@@ -84,82 +84,82 @@ public class UserService {
 //      * Update user from UserUpdateDTO
 //      */
 //     @Transactional
-//     public Users updateUser(Long userId, UsersUpdateDto userUpdateDTO) {
-//         log.info("Updating user ID: {}", userId);
+    public Users updateUser(Long userId, UsersUpdateDto userUpdateDTO) {
+        log.info("Updating user ID: {}", userId);
         
-//         Users user = getUserById(userId);
-//         boolean changesMade = false;
+        Users user = getUserById(userId);
+        boolean changesMade = false;
         
-//         // Update email if provided
-//         if (userUpdateDTO.getemail() != null && !userUpdateDTO.getemail().isBlank()) {
-//             log.debug("Updating email for user ID: {}", userId);
+        // Update email if provided
+        if (userUpdateDTO.getemail() != null && !userUpdateDTO.getemail().isBlank()) {
+            log.debug("Updating email for user ID: {}", userId);
             
-//             // Check if new email already exists
-//             Optional<Users> existingUser = userRepository.findByEmail(userUpdateDTO.getemail());
-//             if (existingUser.isPresent() && !existingUser.get().getuserId().equals(userId)) {
-//                 log.warn("Email update failed - email already in use: {}", userUpdateDTO.getemail());
-//                 throw new UserAlreadyExistsException("Email already in use");
-//             }
-//             user.setemail(userUpdateDTO.getemail());
-//             changesMade = true;
-//         }
+            // Check if new email already exists
+            Optional<Users> existingUser = userRepository.findByEmail(userUpdateDTO.getemail());
+            if (existingUser.isPresent() && !existingUser.get().getuserId().equals(userId)) {
+                log.warn("Email update failed - email already in use: {}", userUpdateDTO.getemail());
+                throw new UserAlreadyExistsException("Email already in use");
+            }
+            user.setemail(userUpdateDTO.getemail());
+            changesMade = true;
+        }
         
-//         // Update phoneNumber if provided
+        // Update phoneNumber if provided
         
-//         // Update username if provided
-//         if (userUpdateDTO.getusername() != null && !userUpdateDTO.getusername().isBlank()) {
-//             log.debug("Updating username for user ID: {}", userId);
+        // Update username if provided
+        if (userUpdateDTO.getusername() != null && !userUpdateDTO.getusername().isBlank()) {
+            log.debug("Updating username for user ID: {}", userId);
             
-//             // Check if new username already exists
-//             Optional<Users> existingUser = userRepository.findByUsername(userUpdateDTO.getusername());
-//             if (existingUser.isPresent() && !existingUser.get().getuserId().equals(userId)) {
-//                 log.warn("Username update failed - username already in use: {}", userUpdateDTO.getusername());
-//                 throw new UserAlreadyExistsException("Username already taken");
-//             }
-//             user.setusername(userUpdateDTO.getusername());
-//             changesMade = true;
-//         }
+            // Check if new username already exists
+            Optional<Users> existingUser = userRepository.findByUserName(userUpdateDTO.getusername());
+            if (existingUser.isPresent() && !existingUser.get().getuserId().equals(userId)) {
+                log.warn("Username update failed - username already in use: {}", userUpdateDTO.getusername());
+                throw new UserAlreadyExistsException("Username already taken");
+            }
+            user.setusername(userUpdateDTO.getusername());
+            changesMade = true;
+        }
 
-//             if (userUpdateDTO.getpassword() != null && !userUpdateDTO.getpassword().isBlank()) {
-//             String encodedPassword = passwordEncoder.encode(userUpdateDTO.getpassword());
-//             user.setpassword(encodedPassword);
-//             changesMade = true;
-//         }
+            if (userUpdateDTO.getpassword() != null && !userUpdateDTO.getpassword().isBlank()) {
+            String encodedPassword = passwordEncoder.encode(userUpdateDTO.getpassword());
+            user.setpassword(encodedPassword);
+            changesMade = true;
+        }
     
-//     // Update UserDetails if any personal info provided
-//         if (user.getuserDetails() == null) {
-//             user.setuserDetails(new UserDetails());
-//             user.getuserDetails().setusers(user);
-//         }
+    // Update UserDetails if any personal info provided
+        if (user.getuserDetails() == null) {
+            user.setuserDetails(new UserDetails());
+            user.getuserDetails().setusers(user);
+        }
         
-//         UserDetails userDetails = user.getuserDetails();
+        UserDetails userDetails = user.getuserDetails();
         
-//         if (userUpdateDTO.getfirstName() != null && !userUpdateDTO.getfirstName().isBlank()) {
-//             userDetails.setfirstName(userUpdateDTO.getfirstName());
-//             changesMade = true;
-//         }
+        if (userUpdateDTO.getfirstName() != null && !userUpdateDTO.getfirstName().isBlank()) {
+            userDetails.setfirstName(userUpdateDTO.getfirstName());
+            changesMade = true;
+        }
         
-//         if (userUpdateDTO.getlastName() != null && !userUpdateDTO.getlastName().isBlank()) {
-//             userDetails.setlastName(userUpdateDTO.getlastName());
-//             changesMade = true;
-//         }
+        if (userUpdateDTO.getlastName() != null && !userUpdateDTO.getlastName().isBlank()) {
+            userDetails.setlastName(userUpdateDTO.getlastName());
+            changesMade = true;
+        }
         
-//         if (userUpdateDTO.getphone() != null && !userUpdateDTO.getphone().isBlank()) {
-//             userDetails.setphone(userUpdateDTO.getphone());
-//             changesMade = true;
-//         }
+        if (userUpdateDTO.getphone() != null && !userUpdateDTO.getphone().isBlank()) {
+            userDetails.setphone(userUpdateDTO.getphone());
+            changesMade = true;
+        }
         
-//         if (changesMade) {
-//             user.setupdatedAt(LocalDateTime.now());
-//             userDetails.setupdatedAt(LocalDateTime.now());
-//             Users updatedUser = userRepository.save(user);
-//             log.info("User ID: {} updated successfully", userId);
-//             return updatedUser;
-//         } else {
-//             log.debug("No changes to update for user ID: {}", userId);
-//             return user;
-//         }
-//     }
+        if (changesMade) {
+            user.setupdatedAt(LocalDateTime.now());
+            userDetails.setupdatedAt(LocalDateTime.now());
+            Users updatedUser = userRepository.save(user);
+            log.info("User ID: {} updated successfully", userId);
+            return updatedUser;
+        } else {
+            log.debug("No changes to update for user ID: {}", userId);
+            return user;
+        }
+    }
     
 //     /**
 //      * Get user by ID
@@ -177,7 +177,7 @@ public class UserService {
         log.trace("Found user: {}", user.get().getemail());
         return user.get();
     }
-}
+
     
 //     /**
 //      * Authenticate user
@@ -234,31 +234,33 @@ public class UserService {
 //     /**
 //      * Get all users
 //      */
-//     public List<Users> getAllUsers() {
-//         log.info("Fetching all users");
+    public List<Users> getAllUsers() {
+        log.info("Fetching all users");
         
-//         List<Users> users = userRepository.findAll();
-//         log.debug("Found {} users", users.size());
-//         return users;
-//     }
+        List<Users> users = userRepository.findAll();
+        log.debug("Found {} users", users.size());
+        return users;
+    }
     
+
 //     /**
 //      * Delete user
 //      */
-//     @Transactional
-//     public void deleteUser(Long userId) {
-//         log.warn("Deleting user ID: {}", userId);
+    @Transactional
+    public void deleteUser(Long userId) {
+        log.warn("Deleting user ID: {}", userId);
         
-//         Users user = getUserById(userId);
+        Users user = getUserById(userId);
         
-//         try {
-//             userRepository.delete(user);
-//             log.info("User ID: {} deleted successfully", userId);
-//         } catch (Exception e) {
-//             log.error("Failed to delete user ID: {}", userId, e);
-//             throw new ServiceException("Failed to delete user", e);
-//         }
-//     }
+        try {
+            userRepository.delete(user);
+            log.info("User ID: {} deleted successfully", userId);
+        } catch (Exception e) {
+            log.error("Failed to delete user ID: {}", userId, e);
+            throw new ServiceException("Failed to delete user", e);
+        }
+    }
+}
     
     
 //     /**
